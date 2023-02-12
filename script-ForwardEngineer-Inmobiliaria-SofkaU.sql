@@ -5,21 +5,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema inmobiliariaSofkaU
+-- Schema inmobiliaria_SofkaU
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema inmobiliariaSofkaU
+-- Schema inmobiliaria_SofkaU
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `inmobiliariaSofkaU` DEFAULT CHARACTER SET utf8 ;
-USE `inmobiliariaSofkaU` ;
+CREATE SCHEMA IF NOT EXISTS `inmobiliaria_SofkaU` DEFAULT CHARACTER SET utf8 ;
+USE `inmobiliaria_SofkaU` ;
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Propietario`
+-- Table `inmobiliaria_SofkaU`.`Propietario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Propietario` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Propietario` (
   `cedula` VARCHAR(15) NOT NULL,
-  `telefono` VARCHAR(15) NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `correoElectronico` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`cedula`))
@@ -27,9 +26,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Inmueble`
+-- Table `inmobiliaria_SofkaU`.`Inmueble`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Inmueble` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Inmueble` (
   `id` VARCHAR(15) NOT NULL,
   `descripcion` VARCHAR(45) NOT NULL,
   `disponibilidad` TINYINT NOT NULL,
@@ -49,9 +48,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Asesor`
+-- Table `inmobiliaria_SofkaU`.`Asesor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Asesor` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Asesor` (
   `cedula` VARCHAR(15) NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `salario` INT NOT NULL,
@@ -62,9 +61,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`DatosInmobiliaria`
+-- Table `inmobiliaria_SofkaU`.`DatosInmobiliaria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`DatosInmobiliaria` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`DatosInmobiliaria` (
   `nombre` VARCHAR(45) NOT NULL,
   `direccion` VARCHAR(45) NOT NULL,
   `correo` VARCHAR(45) NOT NULL,
@@ -74,41 +73,41 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`telefono_propietario`
+-- Table `inmobiliaria_SofkaU`.`telefono_propietario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`telefono_propietario` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`telefono_propietario` (
   `telefono` VARCHAR(15) NOT NULL,
   `Propietario_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`telefono`, `Propietario_cedula`),
   INDEX `fk_telefono_propietario_Propietario1_idx` (`Propietario_cedula` ASC) VISIBLE,
   CONSTRAINT `fk_telefono_propietario_Propietario1`
     FOREIGN KEY (`Propietario_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Propietario` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Propietario` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`telefono_inmobiliaria`
+-- Table `inmobiliaria_SofkaU`.`telefono_inmobiliaria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`telefono_inmobiliaria` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`telefono_inmobiliaria` (
   `telefono` VARCHAR(15) NOT NULL,
   `DatosInmobiliaria_nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`telefono`, `DatosInmobiliaria_nombre`),
   INDEX `fk_telefono_inmobiliaria_DatosInmobiliaria1_idx` (`DatosInmobiliaria_nombre` ASC) VISIBLE,
   CONSTRAINT `fk_telefono_inmobiliaria_DatosInmobiliaria1`
     FOREIGN KEY (`DatosInmobiliaria_nombre`)
-    REFERENCES `inmobiliariaSofkaU`.`DatosInmobiliaria` (`nombre`)
+    REFERENCES `inmobiliaria_SofkaU`.`DatosInmobiliaria` (`nombre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Compra`
+-- Table `inmobiliaria_SofkaU`.`Compra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Compra` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Compra` (
   `id` VARCHAR(15) NOT NULL,
   `fecha` VARCHAR(15) NOT NULL,
   `precioVenta` INT NOT NULL,
@@ -122,26 +121,26 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Compra` (
   INDEX `fk_Compra_Inmueble1_idx` (`Inmueble_id` ASC) VISIBLE,
   CONSTRAINT `fk_Compra_Asesor1`
     FOREIGN KEY (`Asesor_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Asesor` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Asesor` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Compra_DatosInmobiliaria1`
     FOREIGN KEY (`DatosInmobiliaria_nombre`)
-    REFERENCES `inmobiliariaSofkaU`.`DatosInmobiliaria` (`nombre`)
+    REFERENCES `inmobiliaria_SofkaU`.`DatosInmobiliaria` (`nombre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Compra_Inmueble1`
     FOREIGN KEY (`Inmueble_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Inmueble` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Inmueble` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Alquiler`
+-- Table `inmobiliaria_SofkaU`.`Alquiler`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Alquiler` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Alquiler` (
   `id` VARCHAR(15) NOT NULL,
   `fecha_inicial` VARCHAR(15) NOT NULL,
   `fecha_final` VARCHAR(15) NOT NULL,
@@ -154,26 +153,26 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Alquiler` (
   INDEX `fk_Alquiler_Inmueble1_idx` (`Inmueble_id` ASC) VISIBLE,
   CONSTRAINT `fk_Alquiler_Asesor1`
     FOREIGN KEY (`Asesor_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Asesor` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Asesor` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Alquiler_DatosInmobiliaria1`
     FOREIGN KEY (`DatosInmobiliaria_nombre`)
-    REFERENCES `inmobiliariaSofkaU`.`DatosInmobiliaria` (`nombre`)
+    REFERENCES `inmobiliaria_SofkaU`.`DatosInmobiliaria` (`nombre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Alquiler_Inmueble1`
     FOREIGN KEY (`Inmueble_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Inmueble` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Inmueble` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Visita`
+-- Table `inmobiliaria_SofkaU`.`Visita`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Visita` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Visita` (
   `id` INT NOT NULL,
   `fecha` VARCHAR(15) NOT NULL,
   `Asesor_cedula` VARCHAR(15) NOT NULL,
@@ -183,21 +182,21 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Visita` (
   INDEX `fk_Visita_Inmueble1_idx` (`Inmueble_id` ASC) VISIBLE,
   CONSTRAINT `fk_Visita_Asesor1`
     FOREIGN KEY (`Asesor_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Asesor` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Asesor` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Visita_Inmueble1`
     FOREIGN KEY (`Inmueble_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Inmueble` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Inmueble` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Cliente`
+-- Table `inmobiliaria_SofkaU`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Cliente` (
   `cedula` VARCHAR(15) NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `correElectronico` VARCHAR(45) NOT NULL,
@@ -209,25 +208,25 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`telefono_cliente`
+-- Table `inmobiliaria_SofkaU`.`telefono_cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`telefono_cliente` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`telefono_cliente` (
   `telefono` VARCHAR(15) NOT NULL,
   `Cliente_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`telefono`, `Cliente_cedula`),
   INDEX `fk_telefono_cliente_Cliente1_idx` (`Cliente_cedula` ASC) VISIBLE,
   CONSTRAINT `fk_telefono_cliente_Cliente1`
     FOREIGN KEY (`Cliente_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Cliente` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Cliente` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Inmueble_Propietario`
+-- Table `inmobiliaria_SofkaU`.`Inmueble_Propietario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Inmueble_Propietario` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Inmueble_Propietario` (
   `Inmueble_id` VARCHAR(15) NOT NULL,
   `Propietario_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`Inmueble_id`, `Propietario_cedula`),
@@ -235,21 +234,21 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Inmueble_Propietario` (
   INDEX `fk_Inmueble_has_Propietario_Inmueble_idx` (`Inmueble_id` ASC) VISIBLE,
   CONSTRAINT `fk_Inmueble_has_Propietario_Inmueble`
     FOREIGN KEY (`Inmueble_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Inmueble` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Inmueble` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Inmueble_has_Propietario_Propietario1`
     FOREIGN KEY (`Propietario_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Propietario` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Propietario` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Compra_Cliente`
+-- Table `inmobiliaria_SofkaU`.`Compra_Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Compra_Cliente` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Compra_Cliente` (
   `Compra_id` VARCHAR(15) NOT NULL,
   `Cliente_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`Compra_id`, `Cliente_cedula`),
@@ -257,21 +256,21 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Compra_Cliente` (
   INDEX `fk_Compra_has_Cliente_Compra1_idx` (`Compra_id` ASC) VISIBLE,
   CONSTRAINT `fk_Compra_has_Cliente_Compra1`
     FOREIGN KEY (`Compra_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Compra` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Compra` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Compra_has_Cliente_Cliente1`
     FOREIGN KEY (`Cliente_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Cliente` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Cliente` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Alquiler_Cliente`
+-- Table `inmobiliaria_SofkaU`.`Alquiler_Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Alquiler_Cliente` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Alquiler_Cliente` (
   `Alquiler_id` VARCHAR(15) NOT NULL,
   `Cliente_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`Alquiler_id`, `Cliente_cedula`),
@@ -279,21 +278,21 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Alquiler_Cliente` (
   INDEX `fk_Alquiler_has_Cliente_Alquiler1_idx` (`Alquiler_id` ASC) VISIBLE,
   CONSTRAINT `fk_Alquiler_has_Cliente_Alquiler1`
     FOREIGN KEY (`Alquiler_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Alquiler` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Alquiler` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Alquiler_has_Cliente_Cliente1`
     FOREIGN KEY (`Cliente_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Cliente` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Cliente` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `inmobiliariaSofkaU`.`Visita_Cliente`
+-- Table `inmobiliaria_SofkaU`.`Visita_Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Visita_Cliente` (
+CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Visita_Cliente` (
   `Visita_id` INT NOT NULL,
   `Cliente_cedula` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`Visita_id`, `Cliente_cedula`),
@@ -301,12 +300,12 @@ CREATE TABLE IF NOT EXISTS `inmobiliariaSofkaU`.`Visita_Cliente` (
   INDEX `fk_Visita_has_Cliente_Visita1_idx` (`Visita_id` ASC) VISIBLE,
   CONSTRAINT `fk_Visita_has_Cliente_Visita1`
     FOREIGN KEY (`Visita_id`)
-    REFERENCES `inmobiliariaSofkaU`.`Visita` (`id`)
+    REFERENCES `inmobiliaria_SofkaU`.`Visita` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Visita_has_Cliente_Cliente1`
     FOREIGN KEY (`Cliente_cedula`)
-    REFERENCES `inmobiliariaSofkaU`.`Cliente` (`cedula`)
+    REFERENCES `inmobiliaria_SofkaU`.`Cliente` (`cedula`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
