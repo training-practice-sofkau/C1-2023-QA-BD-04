@@ -30,7 +30,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `inmobiliaria_SofkaU`.`Inmueble` (
   `id` VARCHAR(15) NOT NULL,
-  `descripcion` VARCHAR(45) NOT NULL,
   `disponibilidad` TINYINT NOT NULL,
   `estado (N/O)` VARCHAR(5) NOT NULL,
   `precioAlquiler` INT NOT NULL,
