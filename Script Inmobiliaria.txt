@@ -1,0 +1,306 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Propietario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Propietario` (
+  `Cedula` VARCHAR(15) NOT NULL,
+  `Nombre` VARCHAR(100) NOT NULL,
+  `Correo` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (`Cedula`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Telefono_Propietario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Telefono_Propietario` (
+  `cedula_Propietario` VARCHAR(15) NOT NULL,
+  `Telefono` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`cedula_Propietario`, `Telefono`),
+  CONSTRAINT `Cedula_propietario`
+    FOREIGN KEY (`cedula_Propietario`)
+    REFERENCES `mydb`.`Propietario` (`Cedula`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Inmueble`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Inmueble` (
+  `IdInmueble` VARCHAR(20) NOT NULL,
+  `Area` VARCHAR(20) NOT NULL,
+  `Piso` VARCHAR(10) NOT NULL,
+  `Estrato` VARCHAR(10) NOT NULL,
+  `Departamento` VARCHAR(30) NOT NULL,
+  `Ciudad` VARCHAR(30) NOT NULL,
+  `Barrio` VARCHAR(60) NOT NULL,
+  `Complemento` VARCHAR(45) NOT NULL,
+  `Estado` VARCHAR(50) NOT NULL,
+  `Precio_Propietario` VARCHAR(20) NOT NULL,
+  `Cedula_Propietario` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`IdInmueble`),
+  INDEX `Cedula_idx` (`Cedula_Propietario` ASC) VISIBLE,
+  CONSTRAINT `Cedula_propietario`
+    FOREIGN KEY (`Cedula_Propietario`)
+    REFERENCES `mydb`.`Propietario` (`Cedula`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Fotos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Fotos` (
+  `id_Inmueble` VARCHAR(15) NOT NULL,
+  `Fotos` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (`id_Inmueble`, `Fotos`),
+  CONSTRAINT `id_Inmueble`
+    FOREIGN KEY (`id_Inmueble`)
+    REFERENCES `mydb`.`Inmueble` (`IdInmueble`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Asesor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Asesor` (
+  `cedula_asesor` VARCHAR(15) NOT NULL,
+  `Nombre` VARCHAR(100) NOT NULL,
+  `Salario` VARCHAR(10) NOT NULL,
+  `Telefono` VARCHAR(15) NOT NULL,
+  `Correo` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (`cedula_asesor`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Visitas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Visitas` (
+  `id_Visitas` VARCHAR(15) NOT NULL,
+  `Dia` VARCHAR(5) NOT NULL,
+  `Mes` VARCHAR(5) NOT NULL,
+  `Año` VARCHAR(6) NOT NULL,
+  `id_Inmueble` VARCHAR(20) NOT NULL,
+  `cedula_Asesor` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`id_Visitas`),
+  INDEX `cedula_asesor_idx` (`cedula_Asesor` ASC) VISIBLE,
+  INDEX `idInmueble_idx` (`id_Inmueble` ASC) VISIBLE,
+  CONSTRAINT `idInmueble`
+    FOREIGN KEY (`id_Inmueble`)
+    REFERENCES `mydb`.`Inmueble` (`IdInmueble`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cedula_asesor_visita`
+    FOREIGN KEY (`cedula_Asesor`)
+    REFERENCES `mydb`.`Asesor` (`cedula_asesor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
+  `Ced_cliente` VARCHAR(15) NOT NULL,
+  `Nombre` VARCHAR(100) NOT NULL,
+  `Correo` VARCHAR(60) NOT NULL,
+  `Ingresos` VARCHAR(15) NOT NULL,
+  `Direccion` VARCHAR(60) NOT NULL,
+  `Habilitado` VARCHAR(5) NOT NULL,
+  PRIMARY KEY (`Ced_cliente`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`telefono_cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`telefono_cliente` (
+  `cedula_cliente` VARCHAR(15) NOT NULL,
+  `telefono` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`cedula_cliente`, `telefono`),
+  CONSTRAINT `cedula_cliente`
+    FOREIGN KEY (`cedula_cliente`)
+    REFERENCES `mydb`.`Cliente` (`Ced_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Visita_Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Visita_Cliente` (
+  `id_visita` VARCHAR(15) NOT NULL,
+  `ced_cliente` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`id_visita`, `ced_cliente`),
+  INDEX `ced_cliente_idx` (`ced_cliente` ASC) VISIBLE,
+  CONSTRAINT `ced_cliente_visita`
+    FOREIGN KEY (`ced_cliente`)
+    REFERENCES `mydb`.`Cliente` (`Ced_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `id_visita`
+    FOREIGN KEY (`id_visita`)
+    REFERENCES `mydb`.`Visitas` (`id_Visitas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Inmobiliaria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Inmobiliaria` (
+  `Nombre_Inmbiliaria` VARCHAR(100) NOT NULL,
+  `Direccion` VARCHAR(100) NOT NULL,
+  `Correo` VARCHAR(60) NOT NULL,
+  `Pagina_web` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Nombre_Inmbiliaria`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Alquiler`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Alquiler` (
+  `id_alquiler` VARCHAR(15) NOT NULL,
+  `Precio_alquiler` VARCHAR(10) NOT NULL,
+  `Duracion` VARCHAR(25) NOT NULL,
+  `Cedula_asesor` VARCHAR(15) NOT NULL,
+  `nombre_Inmobiliaria` VARCHAR(100) NOT NULL,
+  `id_inmueble` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`id_alquiler`),
+  INDEX `nombre_inmobilliaria_idx` (`nombre_Inmobiliaria` ASC) VISIBLE,
+  INDEX `cedulaAsesor_idx` (`Cedula_asesor` ASC) VISIBLE,
+  INDEX `idInmueble_idx` (`id_inmueble` ASC) VISIBLE,
+  CONSTRAINT `cedulaAsesorAlquiler`
+    FOREIGN KEY (`Cedula_asesor`)
+    REFERENCES `mydb`.`Asesor` (`cedula_asesor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `nombre_inmobilliaria`
+    FOREIGN KEY (`nombre_Inmobiliaria`)
+    REFERENCES `mydb`.`Inmobiliaria` (`Nombre_Inmbiliaria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `idInmueble`
+    FOREIGN KEY (`id_inmueble`)
+    REFERENCES `mydb`.`Inmueble` (`IdInmueble`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Alquiler_Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Alquiler_Cliente` (
+  `id_alquiler` VARCHAR(15) NOT NULL,
+  `Cedula_cliente` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`id_alquiler`, `Cedula_cliente`),
+  INDEX `cedulaCliente_idx` (`Cedula_cliente` ASC) VISIBLE,
+  CONSTRAINT `id_alquiler`
+    FOREIGN KEY (`id_alquiler`)
+    REFERENCES `mydb`.`Alquiler` (`id_alquiler`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cedulaClienteAlquiler`
+    FOREIGN KEY (`Cedula_cliente`)
+    REFERENCES `mydb`.`Cliente` (`Ced_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Compra`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Compra` (
+  `idCompra` VARCHAR(15) NOT NULL,
+  `Precio_venta` VARCHAR(15) NOT NULL,
+  `Ced_Asesor` VARCHAR(15) NOT NULL,
+  `nombre_Inmobiliaria` VARCHAR(100) NOT NULL,
+  `Id_inmueble` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`idCompra`),
+  INDEX `nombre_inmobiliaria_idx` (`nombre_Inmobiliaria` ASC) VISIBLE,
+  INDEX `cedulaAsesor_idx` (`Ced_Asesor` ASC) VISIBLE,
+  INDEX `ID_INMUEBLES_idx` (`Id_inmueble` ASC) VISIBLE,
+  CONSTRAINT `nombre_inmobiliaria`
+    FOREIGN KEY (`nombre_Inmobiliaria`)
+    REFERENCES `mydb`.`Inmobiliaria` (`Nombre_Inmbiliaria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cedulaAsesorCompra`
+    FOREIGN KEY (`Ced_Asesor`)
+    REFERENCES `mydb`.`Asesor` (`cedula_asesor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `ID_INMUEBLES`
+    FOREIGN KEY (`Id_inmueble`)
+    REFERENCES `mydb`.`Inmueble` (`IdInmueble`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Cliente_Compra`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Cliente_Compra` (
+  `ced_cliente` VARCHAR(15) NOT NULL,
+  `id_compra` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`ced_cliente`, `id_compra`),
+  INDEX `id_compra_idx` (`id_compra` ASC) VISIBLE,
+  CONSTRAINT `id_compra`
+    FOREIGN KEY (`id_compra`)
+    REFERENCES `mydb`.`Compra` (`idCompra`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cedula_cliente_compra`
+    FOREIGN KEY (`ced_cliente`)
+    REFERENCES `mydb`.`Cliente` (`Ced_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Telefono_Inmobiliaria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Telefono_Inmobiliaria` (
+  `Nombre_inmobiliaria` VARCHAR(100) NOT NULL,
+  `Telefono` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`Nombre_inmobiliaria`, `Telefono`),
+  CONSTRAINT `nombre_inmobiliaria_tel`
+    FOREIGN KEY (`Nombre_inmobiliaria`)
+    REFERENCES `mydb`.`Inmobiliaria` (`Nombre_Inmbiliaria`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
