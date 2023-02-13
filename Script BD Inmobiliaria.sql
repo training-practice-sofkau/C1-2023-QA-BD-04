@@ -84,6 +84,9 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`direccionInmueble` (
   `idInmueble` INT NOT NULL,
     FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`))
 ENGINE = InnoDB;
+
+INSERT INTO inmobiliaria.direccionInmueble (departamento, ciudad, comuna, barrio, complemento, idInmueble)
+VALUES ( "Nariño", "Cumbal", "Los pinos", "Lote y casa", 1);
 -- -----------------------------------------------------
 -- Table `inmobiliaria`.`telefonoPropietario`
 -- -----------------------------------------------------
@@ -93,6 +96,8 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`telefonoPropietario` (
    FOREIGN KEY (`idPropietario`) REFERENCES `inmobiliaria`.`propietario` (`id`)
     )
 ENGINE = InnoDB;
+INSERT INTO inmobiliaria.telefonoPropietario(telefono, idPropietario)
+VALUES ("49000", 5);
 -- -----------------------------------------------------
 -- Table `inmobiliaria`.`inmobiliaria`
 -- -----------------------------------------------------
