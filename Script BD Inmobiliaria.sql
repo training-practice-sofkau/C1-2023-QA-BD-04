@@ -16,10 +16,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `inmobiliaria`.`telefonoCliente` (
   `telefono` VARCHAR(12) NOT NULL,
   `cedulaCliente` VARCHAR(14) NOT NULL,
-  PRIMARY KEY (`cedulaCliente`),
-    FOREIGN KEY (`cedulaCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`)
+  FOREIGN KEY (`cedulaCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`)
     )
 ENGINE = InnoDB;
+INSERT INTO inmobiliaria.telefonoCliente (telefono, cedulaCliente)
+VALUES ("528909", "90009");
 
 -- -----------------------------------------------------
 -- Table `inmobiliaria`.`asesor`
@@ -66,10 +67,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `inmobiliaria`.`fotoInmueble` (
   `foto` VARCHAR(45) NOT NULL,
   `idInmueble` INT NOT NULL,
-  PRIMARY KEY (`idInmueble`),
-    FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`)
+	FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`)
     )
 ENGINE = InnoDB;
+INSERT INTO inmobiliaria.fotoInmueble (foto, idInmueble)
+VALUES ("foto2", "2");
 -- -----------------------------------------------------
 -- Table `inmobiliaria`.`direccionInmueble`
 -- -----------------------------------------------------
@@ -80,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`direccionInmueble` (
   `barrio` VARCHAR(45) NOT NULL,
   `complemento` VARCHAR(45) NOT NULL,
   `idInmueble` INT NOT NULL,
-  PRIMARY KEY (`idInmueble`),
     FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`))
 ENGINE = InnoDB;
 -- -----------------------------------------------------
@@ -89,9 +90,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `inmobiliaria`.`telefonoPropietario` (
   `telefono` VARCHAR(12) NOT NULL,
   `idPropietario` INT NOT NULL,
-  PRIMARY KEY (`idPropietario`),
-    FOREIGN KEY (`idPropietario`)
-    REFERENCES `inmobiliaria`.`propietario` (`id`)
+   FOREIGN KEY (`idPropietario`) REFERENCES `inmobiliaria`.`propietario` (`id`)
     )
 ENGINE = InnoDB;
 -- -----------------------------------------------------
@@ -121,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`compra` (
     FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`),
     FOREIGN KEY (`idInmobiliaria`) REFERENCES `inmobiliaria`.`inmobiliaria` (`NIT`),    
     FOREIGN KEY (`idAsesor`) REFERENCES `inmobiliaria`.`asesor` (`cedula`),
-    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`),
+    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`)
     )
 ENGINE = InnoDB;
 
@@ -139,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`alquiler` (
     FOREIGN KEY (`idInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`),
     FOREIGN KEY (`idInmobiliaria`) REFERENCES `inmobiliaria`.`inmobiliaria` (`NIT`),
     FOREIGN KEY (`idAsesor`)  REFERENCES `inmobiliaria`.`asesor` (`cedula`),
-    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`),
+    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`)
     )
 ENGINE = InnoDB;
 
@@ -155,6 +154,6 @@ CREATE TABLE IF NOT EXISTS `inmobiliaria`.`infovisitas` (
   PRIMARY KEY (`id`),
     FOREIGN KEY (`IdAsesor`) REFERENCES `inmobiliaria`.`asesor` (`cedula`),
     FOREIGN KEY (`IdInmueble`) REFERENCES `inmobiliaria`.`inmueble` (`id`),
-    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`),
+    FOREIGN KEY (`idCliente`) REFERENCES `inmobiliaria`.`cliente` (`cedula`)
     )
 ENGINE = InnoDB;
